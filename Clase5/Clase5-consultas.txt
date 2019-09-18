@@ -1,0 +1,49 @@
+INSERT INTO `productos`(`pnro`, `pnombre`, `precio`, `tamaño`, `localidad`) VALUES (3,'Crema',8,'Grande','Ramos Mejia')
+INSERT INTO `productos`(`pnro`, `pnombre`, `precio`, `tamaño`, `localidad`) VALUES (5,'Esmalte',8,'Normal','Chacarita')
+
+
+
+INSERT INTO `proveedores`(`numero`, `nombre`, `domicilio`, `localidad`) VALUES (101,'Gomez','Nazca 920','Capital Federal')
+INSERT INTO `proveedores`(`numero`, `nombre`, `domicilio`, `localidad`) VALUES (102,'Perez','Argerich 1030','Capital Federal')
+INSERT INTO `proveedores`(`numero`, `nombre`, `domicilio`, `localidad`) VALUES (103,'Vazquez','Sarmiento 450','Ramos Mejia')
+
+create table Prov_Prod (numero int not null,pnro int not null,cantidad int not null,PRIMARY KEY (numero,pnro),FOREIGN KEY (numero) REFERENCES proveedores(numero),FOREIGN KEY (pnro) REFERENCES productos (pnro))
+
+INSERT INTO `prov_prod`(`numero`, `pnro`, `cantidad`) VALUES (101,1,300);
+INSERT INTO `prov_prod`(`numero`, `pnro`, `cantidad`) VALUES (101,2,200);
+INSERT INTO `prov_prod`(`numero`, `pnro`, `cantidad`) VALUES (101,3,400);
+INSERT INTO `prov_prod`(`numero`, `pnro`, `cantidad`) VALUES (101,4,200);
+INSERT INTO `prov_prod`(`numero`, `pnro`, `cantidad`) VALUES (101,5,100);
+INSERT INTO `prov_prod`(`numero`, `pnro`, `cantidad`) VALUES (102,1,300);
+INSERT INTO `prov_prod`(`numero`, `pnro`, `cantidad`) VALUES (102,2,400);
+INSERT INTO `prov_prod`(`numero`, `pnro`, `cantidad`) VALUES (103,2,200);
+INSERT INTO `prov_prod`(`numero`, `pnro`, `cantidad`) VALUES (104,2,200);
+INSERT INTO `prov_prod`(`numero`, `pnro`, `cantidad`) VALUES (104,4,300);
+
+Importante para el tp: (Pag 23) 2) select tablas, precio * 1.21 as IVA, year(getnow())-year(colum_Nacimiento)
+4)Where jefe is not null.
+7)where month(fecha_pedido)[devuelve el orden 1-12]=3(marzo)
+9)Lista los 4 productos de menor precio de costo:
+select (top 4)-> solo las 4 primeres colum from table order by precio->con mysql sino con limit y va al final de la consulta.
+Tambien se puede utilizar la funcion SUM(precioxcantidad) as cantidad_total
+
+Ejercicios de DML:
+1)select * from productos
+2)select * from proveedores where localidad='capital federal'
+3)select * from prov_prod WHERE prov_prod.cantidad>=200 AND prov_prod.cantidad<=300
+4)select productos.pnro from productos where localidad='Avellaneda'
+5)select SUM(prov_prod.cantidad) as CANTIDAD from prov_prod where prov_prod.numero=103 and prov_prod.pnro=1
+6)
+7)select productos.precio from productos where productos.pnro in (select prov_prod.pnro from prov_prod where prov_prod.numero=102)
+8)select localidad from productos UNION SELECT localidad from proveedores
+9)update productos set tamaño='chico' where tamaño='mediano'
+10)delete from productos where productos.pnro NOT in (select pnro from prov_prod)
+11)insert into proveedores (nombre,localidad) values ('Rosales','Wilde') 
+
+
+
+Ejercicio 2.
+Tabla ITEM_VENTAS:
+create table item_ventas (numero_factura int,codigo_producto int,cantidad int not null,precio float not null, PRIMARY KEY(numero_factura),FOREIGN KEY (codigo_producto) REFERENCES productos(codigo_producto))
+
+create table ventas (numero_factura int,codigo_cliente int,fecha DATE not null,FOREIGN KEY (numero_factura) REFERENCES item_ventas(numero_factura),FOREIGN KEY (codigo_cliente) REFERENCES clientes(codigo_cliente))
